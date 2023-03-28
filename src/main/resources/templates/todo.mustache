@@ -1,0 +1,14 @@
+{{> header}}
+
+<h1>{{title}}</h1>
+<div class="articles">
+
+{{#todo}}
+        <section>
+            <header class="article-header">
+                <h2 class="article-title"><a href="/article/{{name}}">{{name}}</a></h2>
+            </header>
+        </section>
+{{/todo}}
+
+{{> footer}}
