@@ -1,12 +1,16 @@
+
 FROM openjdk:17-jdk-slim
 
-WORKDIR /app
+VOLUME /tmp
+RUN mkdir /app
+
 COPY . /app
+
+WORKDIR /app
 
 RUN  chmod +x gradlew
 RUN ./gradlew build
+RUN mv build/libs/*.jar /app.jar
 
-COPY build/libs/*.jar app.jar
 
-EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
