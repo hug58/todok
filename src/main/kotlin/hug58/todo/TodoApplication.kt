@@ -6,13 +6,14 @@ import org.springframework.boot.Banner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @SpringBootApplication
 class TodoApplication{
 
-	@Value("\${SPRING_DATASOURCE_URL}")
-	private val datasourceUrl: String? = null
+	//@Value("\${SPRING_DATASOURCE_URL}")
+	//private val datasourceUrl: String? = null
 
 	@Bean
 	fun databaseInitializer(userRepository: UserRepository,
@@ -42,6 +43,9 @@ class MessageController (private  val repository: TodoRepository, private val us
 
 	@PostMapping("/")
 	fun create(@RequestBody req: RequestTodo): Todo {
+
+		println("test")
+
 		var todo = Todo(
 			name = req.name,
 			description = req.description,
@@ -55,6 +59,16 @@ class MessageController (private  val repository: TodoRepository, private val us
 
 		return repository.save(todo)
 	}
+
+	@DeleteMapping("/{id}")
+	fun delete(@PathVariable id:Long): ResponseEntity<Void> {
+		repository.deleteById(id)
+		return ResponseEntity.noContent().build()
+	}
+
+	@GetMapping("/test/dos")
+	fun index(@RequestParam("name") name: String) = "Helo, $name!"
+
 }
 
 
