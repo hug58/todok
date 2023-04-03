@@ -10,7 +10,6 @@ WORKDIR /app
 
 RUN  chmod +x gradlew
 RUN ./gradlew build
-RUN mv build/libs/*.jar /app.jar
+RUN mv build/libs/*.jar .
 
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "todo-0.0.1-SNAPSHOT.jar"]

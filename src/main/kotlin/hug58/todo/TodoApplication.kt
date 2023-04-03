@@ -8,6 +8,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import kotlin.jvm.optionals.getOrNull
 
 @SpringBootApplication
 class TodoApplication{
@@ -39,7 +40,6 @@ fun main(args: Array<String>) {
 class MessageController (private  val repository: TodoRepository, private val userRepository: UserRepository) {
 	@GetMapping("/")
 	fun findAll() = repository.findAll()
-	//fun index(@RequestParam("name") name: String) = "Helo, $name!"
 
 	@PostMapping("/")
 	fun create(@RequestBody req: RequestTodo): Todo {
@@ -60,14 +60,33 @@ class MessageController (private  val repository: TodoRepository, private val us
 		return repository.save(todo)
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}/")
 	fun delete(@PathVariable id:Long): ResponseEntity<Void> {
 		repository.deleteById(id)
 		return ResponseEntity.noContent().build()
 	}
 
-	@GetMapping("/test/dos")
+	@GetMapping("/test/")
 	fun index(@RequestParam("name") name: String) = "Helo, $name!"
+
+
+	@PutMapping("/{id}/")
+	fun updateResource(@PathVariable id: Long, @RequestBody req: RequestTodo): ResponseEntity<Todo> {
+		var todo = repository.findById(id).get()
+
+		todo.description = req.description
+		todo.name = req.name
+		todo.image = req.image
+
+		val updatedResource = repository.save(todo)
+		return ResponseEntity.ok(updatedResource)
+	}
+
+	@GetMapping("/{id}/")
+	fun detail(@PathVariable id: Long): ResponseEntity<Todo> {
+		var todo = repository.findById(id).get()
+		return ResponseEntity.ok(todo)
+	}
 
 }
 
